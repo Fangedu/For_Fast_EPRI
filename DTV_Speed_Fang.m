@@ -1,25 +1,25 @@
 % The Program of DTV Algorithm For EPRI
 % Author: Fang CY
-% Date 2023/04/23
+% Updated on 2024/01/12
 
 set(0,'DefaultFigureColormap',jet);
 
 clear;
 clc;
 
-len_proj=3*sqrt(2);
+len_proj=3*sqrt(2); % fov
 
-n_proj=208;
+n_proj=208; % number of projection
 
-bandwidth = 0.07; % ###need to test###
+bandwidth = 0.07; % filtercutoff
 
-n_iter=150; % 1500 is from the experience in reconstructing small bottle.
+n_iter=150; % number of iteration
 
 t_factor=0.5; % Try 0.2:0.1:0.6
 
 N=64;         % the object is of size [N,N,N].
 
-shots=100;
+shots=100; % repetition time
 
 n_polar=18;
 
@@ -101,6 +101,7 @@ TV_x=error;
 
 figure;
 tic;
+%DTV algorithm
 for ii=1:n_iter
     
     
@@ -140,21 +141,21 @@ for ii=1:n_iter
 
    TV_x(ii)=sum(sum(sum(abs(D1f_3D(object))))); % TV at x direction.
 
-  object_old=object;
+   object_old=object;
    
-  object = flip(object, 2); % flip y axis
-  object = permute(object, [3,2,1]); % change x and z
+   object = flip(object, 2); % flip y axis
+   object = permute(object, [3,2,1]); % change x and z
 
-   subplot(2,2,1)
+   subplot(2,2,1) % show object_truth
    imagesc(flip(squeeze(object_truth(:,N/2,:)),1));
    title(num2str(shots));
    
    
-   subplot(2,2,2)
+   subplot(2,2,2) % show reconstructed object
    imagesc(flip(squeeze(object(:,N/2,:)),1));
    title(num2str(ii));
 
-   subplot(2,2,3)
+   subplot(2,2,3) % show profile
    plot(1:N,squeeze(object_truth(:,N/2,N/2)),'r',1:N,squeeze(object(:,N/2,N/2)),'b');
    
 
